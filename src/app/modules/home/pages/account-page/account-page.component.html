@@ -1,0 +1,100 @@
+<div class="flex flex-col gap-2 py-5 px-5 text-sm w-full h-full" *ngIf="mode == modeEnum.initial">
+  <div class="flex flex-col gap-5 bg-white p-5 rounded-lg shadow-lg">
+    <div class="flex flex-row justify-between">
+      <span class="font-bold">User table</span>
+      <div class="flex flex-row gap-2">
+        <input type="text" placeholder="search" class="text-xs focus:ring-0 focus:outline-none focus:border-none border-none bg-gray-100 rounded-lg" [formControl]="search">
+        <app-dropdown [value]="params.role ?? 'role'" [option]="['user', 'admin', 'operator', 'all']" (select)="changeRole($event)"></app-dropdown>
+        <button type="button" class="bg-blue-600 rounded-lg px-3 py-2 text-white font-bold" (click)="changeMode(modeEnum.create)">ADD</button>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <table class="w-full">
+        <thead class="bg-blue-500 text-slate-100 rounded-lg w-full">
+          <tr>
+            <th class="px-3 py-2 text-start">ID</th>
+            <th class="px-3 py-2 text-start">Name</th>
+            <th class="px-3 py-2 text-start">Username</th>
+            <th class="px-3 py-2 text-start">Email</th>
+            <th class="px-3 py-2 text-start">Role</th>
+            <th class="px-3 py-2 text-start max-w-xs">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of users.data; let i = index">
+            <tr [ngClass]="i % 2 != 0 ? 'bg-blue-100' : '' ">
+              <td class="px-3 py-2 text-start max-w-xs">{{ item.id }}</td>
+              <td class="px-3 py-2 text-start">{{ item.name }}</td>
+              <td class="px-3 py-2 text-start">{{ item.username }}</td>
+              <td class="px-3 py-2 text-start">{{ item.email }}</td>
+              <td class="px-3 py-2 text-start">{{ item.role }}</td>
+              <td class="px-3 py-2 flex flex-row gap-3 text-lg max-w-xs">
+                <button class="text-red-500" (click)="delete(item.id!)"><i class="fa-solid fa-trash"></i></button>
+                <button class="text-blue-500" (click)="find(item.id!)"><i class="fa-solid fa-pen"></i></button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <div class="flex flex-row font-bold gap-3">
+        <div class="hover:text-blue-500" *ngIf="users.page > 1" ><i class="fa-solid fa-chevron-left"></i></div>
+        <span>Page {{users.page}} from {{users.total_page}}</span>
+        <div class="hover:text-blue-500" *ngIf="users.page < users.total_page"><i class="fa-solid fa-chevron-right"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex flex-col gap-2 py-5 px-5 text-sm w-full h-full" *ngIf="mode == modeEnum.create">
+  <div class="flex flex-col gap-5 bg-white p-5 rounded-lg shadow-lg">
+    <div class="flex flex-row justify-between">
+      <span class="font-bold">User create</span>
+    </div>
+    <form class="flex flex-col gap-2" [formGroup]="formCreate" (submit)="create()">
+      <div class="flex flex-col gap-1" >
+        <input type="text" placeholder="name" class="focus:ring-0 focus:outline-none bg-gray-100 rounded-lg text-sm" [ngClass]="formCreate.get('name')?.touched && formCreate.get('name')?.invalid ? 'border-2 border-red-500 focus:border-2 focus:border-red-500' : 'border-none focus:border-none'" formControlName="name">
+        <span class="text-red-500 text-xs" *ngIf="formCreate.get('name')?.touched && formCreate.get('name')?.invalid" >* name is required!</span>
+      </div>
+      <div class="flex flex-col gap-1" >
+        <input type="text" placeholder="username" class="focus:ring-0 focus:outline-none bg-gray-100 rounded-lg text-sm" [ngClass]="formCreate.get('username')?.touched && formCreate.get('username')?.invalid ? 'border-2 border-red-500 focus:border-2 focus:border-red-500' : 'border-none focus:border-none'" formControlName="username">
+        <span class="text-red-500 text-xs" *ngIf="formCreate.get('username')?.touched && formCreate.get('username')?.invalid" >* username is required!</span>
+      </div>
+      <div class="flex flex-col gap-1" >
+        <input type="text" placeholder="email" class="focus:ring-0 focus:outline-none bg-gray-100 rounded-lg text-sm" [ngClass]="(formCreate.get('email')?.touched && formCreate.get('email')?.hasError('required')) || formCreate.get('email')?.hasError('email') ? 'border-2 border-red-500 focus:border-2 focus:border-red-500' : 'border-none focus:border-none'" formControlName="email">
+        <span class="text-red-500 text-xs" *ngIf="formCreate.get('email')?.touched && formCreate.get('email')?.hasError('required')" >* email is required!</span>
+        <span class="text-red-500 text-xs" *ngIf="formCreate.get('email')?.hasError('email')" >* email is invalid!</span>
+      </div>
+      <div class="flex flex-col gap-1" >
+        <input type="password" placeholder="password" class="focus:ring-0 focus:outline-none bg-gray-100 rounded-lg text-sm" [ngClass]="(formCreate.get('password')?.touched && formCreate.get('password')?.hasError('required') )|| formCreate.get('password')?.hasError('minlength') ? 'border-2 border-red-500 focus:border-2 focus:border-red-500' : 'border-none focus:border-none'" formControlName="password">
+        <span class="text-red-500 text-xs" *ngIf="formCreate.get('password')?.touched && formCreate.get('password')?.hasError('required')" >* password is required!</span>
+        <span class="text-red-500 text-xs" *ngIf="formCreate.get('password')?.hasError('minlength')" >* password minimum 8 character!</span>
+      </div>
+      <div class="flex flex-col">
+        <app-input-dropdown [value]="formCreate.get('role')?.value ?? ''" [option]="['user', 'admin', 'operator']" (select)="changeRoleInput($event)"></app-input-dropdown>
+      </div>
+      <div class="flex flex-row justify-end gap-2">
+        <button type="button" class="bg-red-500 rounded-lg px-3 py-2 text-white font-bold" (click)="changeMode(modeEnum.initial)">CANCEL</button>
+        <button type="submit" class="bg-blue-600 rounded-lg px-3 py-2 text-white font-bold">CREATE</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="flex flex-col gap-2 py-5 px-5 text-sm w-full h-full" *ngIf="mode == modeEnum.update">
+  <div class="flex flex-col gap-5 bg-white p-5 rounded-lg shadow-lg">
+    <div class="flex flex-row justify-between">
+      <span class="font-bold">User update</span>
+    </div>
+    <form class="flex flex-col gap-2" [formGroup]="formUpdate" (submit)="update()">
+      <div class="flex flex-col gap-1" >
+        <input type="text" placeholder="name" class="focus:ring-0 focus:outline-none bg-gray-100 rounded-lg text-sm" [ngClass]="formUpdate.get('name')?.touched && formUpdate.get('name')?.invalid ? 'border-2 border-red-500 focus:border-2 focus:border-red-500' : 'border-none focus:border-none'" formControlName="name">
+        <span class="text-red-500 text-xs" *ngIf="formUpdate.get('name')?.touched && formUpdate.get('name')?.invalid" >* name is required!</span>
+      </div>
+      <div class="flex flex-col">
+        <app-input-dropdown [value]="formUpdate.get('role')?.value ?? ''" [option]="['user', 'admin', 'operator']" (select)="changeRoleInput($event)"></app-input-dropdown>
+      </div>
+      <div class="flex flex-row justify-end gap-2">
+        <button type="button" class="bg-red-500 rounded-lg px-3 py-2 text-white font-bold" (click)="changeMode(modeEnum.initial)">CANCEL</button>
+        <button type="submit" class="bg-blue-600 rounded-lg px-3 py-2 text-white font-bold">UPDATE</button>
+      </div>
+    </form>
+  </div>
+</div>

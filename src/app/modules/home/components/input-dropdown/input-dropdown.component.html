@@ -1,0 +1,13 @@
+<div class="text-xs relative text-gray-600">
+  <div class="flex flex-row gap-2 place-items-center justify-between bg-gray-100 px-4 py-3 rounded-lg" (click)="toggle()">
+    <span>{{value ?? 'order'}}</span>
+    <i class="fa-solid fa-chevron-down"></i>
+  </div>
+  <ul class="absolute left-0 w-full top-[120%] bg-gray-100 shadow-lg rounded-lg" *ngIf="dropdownOrder">
+    <ng-container *ngFor="let item of option">
+      <li class="px-3 py-2 hover:bg-blue-100 rounded-lg" (click)="onSelect(item)">
+        <span>{{item}}</span>
+      </li>
+    </ng-container>
+  </ul>
+</div>

@@ -1,0 +1,45 @@
+<div class="bg-white rounded-lg p-4 shadow-md">
+  <div class="flex flex-col">
+    <div class="flex flex-row place-items-center justify-between ">
+      <span>{{title ?? 'no title'}} Added</span>
+      <div class="flex flex-row gap-2">
+        <div class="text-xs relative">
+          <div class="flex flex-row gap-2 place-items-center justify-between px-3 py-2 bg-blue-100 rounded-lg" (click)="toggleOrder()">
+            <span>{{value ?? 'order'}}</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <ul class="absolute right-0 top-[120%] bg-blue-100 rounded-lg" *ngIf="dropdownOrder">
+            <li class="px-3 py-2 hover:bg-blue-200 rounded-lg" (click)="onOrder('month')">
+              <span>month</span>
+            </li>
+            <li class="px-3 py-2 hover:bg-blue-200 rounded-lg" (click)="onOrder('week')">
+              <span>week</span>
+            </li>
+            <li class="px-3 py-2 hover:bg-blue-200 rounded-lg" (click)="onOrder('minute')">
+              <span>minute</span>
+            </li>
+            <li class="px-3 py-2 hover:bg-blue-200 rounded-lg" (click)="onOrder('second')">
+              <span>second</span>
+            </li>
+          </ul>
+        </div>
+        <div class="text-xs relative">
+          <div class="flex flex-row gap-2 place-items-center justify-between px-3 py-2 bg-blue-100 rounded-lg" (click)="toggleDevice()">
+            <span>{{valueDevice?.id ?? 'device'}}</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <ul class="absolute right-0 top-[120%] bg-blue-100 rounded-lg" *ngIf="dropdownDevice">
+            <ng-container *ngFor="let item of devices">
+              <li class="px-3 py-2 hover:bg-blue-200 rounded-lg" (click)="changeDevice(item)">
+                <span>{{ item.id }}</span>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <canvas baseChart [data]="dataBar" [options]="barChartOptions" [plugins]="barChartPlugins"
+    [legend]="barChartLegend" [type]="'bar'">
+  </canvas>
+  </div>
+</div>

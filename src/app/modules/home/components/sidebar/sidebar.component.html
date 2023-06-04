@@ -1,0 +1,48 @@
+<div class="h-screen bg-white shadow-lg lg:shadow-none flex-col">
+  <div class="flex flex-col h-full gap-5 py-2">
+    <div class="flex flex-col pl-6 pr-3 xl:pr-6 pt-5">
+      <div class="text-md xl:text-lg font-bold flex flex-row place-items-center xl:gap-2 justify-between">
+        <i class="fa-solid fa-gauge"></i>
+        <span>
+          Speed
+          <span class="text-blue-700">Control</span>.
+        </span>
+        <span class="lg:hidden hover:text-blue-700" (click)="toggle()"><i class="fa-solid fa-circle-xmark"></i></span>
+      </div>
+    </div>
+    <ul class="flex flex-col text-xs xl:text-md pl-3 gap-2">
+      <span class="font-bold px-3 py-2">Main Menu</span>
+      <li class="px-3 py-2 rounded-l-lg hover:bg-blue-50 hover:border-r-4 hover:border-blue-700"
+        [ngClass]="currentPath == '/home/dashboard' ? 'bg-blue-50 border-r-4 border-blue-700' : ''"
+        (click)="to('/home/dashboard')">
+        <div class="flex flex-row place-items-center gap-2 font-bold">
+          <i class="fa-solid fa-house"></i>
+          <span>Dashboard</span>
+        </div>
+      </li>
+      <li *ngIf="user.role == 'admin'" class="px-3 py-2 rounded-l-lg hover:bg-blue-50 hover:border-r-4 hover:border-blue-700"
+        [ngClass]="currentPath == '/home/accounts' ? 'bg-blue-50 border-r-4 border-blue-700' : ''"
+        (click)="to('/home/accounts')">
+        <div class="flex flex-row place-items-center gap-2 font-bold">
+          <i class="fa-solid fa-users"></i>
+          <span>Accounts</span>
+        </div>
+      </li>
+      <li *ngIf="user.role != 'admin'" class="px-3 py-2 rounded-l-lg hover:bg-blue-50 hover:border-r-4 hover:border-blue-700"
+        [ngClass]="currentPath == '/home/devices' ? 'bg-blue-50 border-r-4 border-blue-700' : ''"
+        (click)="to('/home/devices')">
+        <div class="flex flex-row place-items-center gap-2 font-bold">
+          <i class="fa-solid fa-microchip"></i>
+          <span>Devices</span>
+        </div>
+      </li>
+    </ul>
+    <div class="flex-1"></div>
+    <div class="flex flex-col text-xs xl:text-md px-3 gap-2">
+      <button class="flex flex-row gap-2 px-3 py-3 font-bold bg-blue-50 hover:bg-red-100 rounded-lg justify-center place-items-center text-md" (click)="onLogout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>LOGOUT</span>
+      </button>
+    </div>
+  </div>
+</div>

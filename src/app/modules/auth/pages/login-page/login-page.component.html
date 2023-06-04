@@ -1,0 +1,26 @@
+<div class="h-screen w-screen flex flex-col justify-center text-md text-gray-900">
+  <div class="flex flex-col place-items-center gap-5">
+    <div class="flex flex-col place-items-center">
+      <span class="text-lg font-bold text-gray-900">Welcome <span class="text-blue-700">to</span></span>
+      <span class="text-3xl font-bold text-gray-900">Speed Controls<span class="text-blue-700">.</span></span>
+    </div>
+    <form [formGroup]="form" (submit)="submit()" class="flex flex-col gap-2">
+      <div class="flex flex-col gap-1" >
+        <input type="text" placeholder="username or email" class="focus:ring-0 focus:outline-none bg-gray-100 rounded-lg" [ngClass]="form.get('username')?.touched && form.get('username')?.invalid ? 'border-2 border-red-500 focus:border-2 focus:border-red-500' : 'border-none focus:border-none'" formControlName="username">
+        <span class="text-red-500 text-xs" *ngIf="form.get('username')?.touched && form.get('username')?.invalid" >* username or email is required!</span>
+      </div>
+      <div class="flex flex-col gap-1" >
+        <input type="password" placeholder="password" class="focus:ring-0 focus:outline-none bg-gray-100 rounded-lg" [ngClass]="form.get('password')?.touched && form.get('password')?.invalid ? 'border-2 border-red-500 focus:border-2 focus:border-red-500' : 'border-none focus:border-none'" formControlName="password">
+        <span class="text-red-500 text-xs" *ngIf="form.get('password')?.touched && form.get('password')?.invalid" >* password is required!</span>
+      </div>
+      <div class="flex flex-row text-sm place-items-center gap-1">
+        <div>Forgot Password? </div>
+        <button class="py-2 px-3 text-blue-700 font-bold">Here</button>
+      </div>
+      <div class="flex flex-col">
+        <button type="submit" class="bg-blue-700 rounded-lg py-2 text-white font-bold">LOGIN</button>
+      </div>
+    </form>
+  </div>
+</div>
+<app-notification></app-notification>
